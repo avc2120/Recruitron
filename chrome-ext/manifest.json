@@ -1,0 +1,42 @@
+{
+    "name": "Recruitron",
+    "manifest_version": 1,
+    "version": "1.0",
+    "description": "Recruitron",
+    "icons": {
+        "128": "images/icon.png",
+        "16": "images/16-full-color.png",
+        "48": "images/icon.png"
+    },
+    "permissions": [
+        "tabs",
+        "http://*.linkedin.com/*",
+        "https://*.linkedin.com/*",
+        "http://*.linkedin-ei.com/*",
+        "https://*.linkedin-ei.com/*"
+    ],
+    "content_scripts" : [{
+        "matches": [
+            "http://*.linkedin.com/*",
+            "https://*.linkedin.com/*",
+            "http://*.linkedin-ei.com/*",
+            "https://*.linkedin-ei.com/*"
+        ],
+        "js": [
+            "jquery.min.js",
+            "content-reader.js"
+        ],
+        "css": [ "hack.css" ],
+        "all_frames": true
+    }],
+    "web_accessible_resources": [
+        "recruitron.html",
+    ],
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+    "background": {
+        "scripts": [ "background.js" ],
+        "persistent": false
+    }
+}
