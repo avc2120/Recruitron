@@ -132,76 +132,33 @@ const recruitronUI = `<html class="artdeco osx">
                             <!---->
                             <div class="care-chat-widget__message-text-container">
                                 <div class="care-chat-widget__message-text-block">
-                                    <p class="care-chat-widget__message-text" id="care-chat-message-1">Hi, I'm here to
-                                        help or connect you with the right person. What do you need help with?</p>
-                                    <ul class="care-chat-widget-menu" data-test-selector="care-chat-widget-menu">
-                                        <li class="care-chat-widget-menu__list-item">
-                                            <button aria-describedby="care-chat-message-1" id="ember12"
-                                                class="artdeco-button artdeco-button--2 artdeco-button--secondary ember-view care-chat-widget-menu__button"
-                                                data-test-selector="care-chat-widget-menu-button"><!---->
-                                                <span class="artdeco-button__text">
-
-                                                    Recruiter
-
-                                                </span></button>
-                                        </li>
-                                        <li class="care-chat-widget-menu__list-item">
-                                            <button aria-describedby="care-chat-message-1" id="ember13"
-                                                class="artdeco-button artdeco-button--2 artdeco-button--secondary ember-view care-chat-widget-menu__button"
-                                                data-test-selector="care-chat-widget-menu-button"><!---->
-                                                <span class="artdeco-button__text">
-
-                                                    Talent Hub
-
-                                                </span></button>
-                                        </li>
-                                        <li class="care-chat-widget-menu__list-item">
-                                            <button aria-describedby="care-chat-message-1" id="ember14"
-                                                class="artdeco-button artdeco-button--2 artdeco-button--secondary ember-view care-chat-widget-menu__button"
-                                                data-test-selector="care-chat-widget-menu-button"><!---->
-                                                <span class="artdeco-button__text">
-
-                                                    Talent Insights
-
-                                                </span></button>
-                                        </li>
-                                        <li class="care-chat-widget-menu__list-item">
-                                            <button aria-describedby="care-chat-message-1" id="ember15"
-                                                class="artdeco-button artdeco-button--2 artdeco-button--secondary ember-view care-chat-widget-menu__button"
-                                                data-test-selector="care-chat-widget-menu-button"><!---->
-                                                <span class="artdeco-button__text">
-
-                                                    Career Pages
-
-                                                </span></button>
-                                        </li>
-                                        <li class="care-chat-widget-menu__list-item">
-                                            <button aria-describedby="care-chat-message-1" id="ember16"
-                                                class="artdeco-button artdeco-button--2 artdeco-button--secondary ember-view care-chat-widget-menu__button"
-                                                data-test-selector="care-chat-widget-menu-button"><!---->
-                                                <span class="artdeco-button__text">
-
-                                                    I don't see my product
-
-                                                </span></button>
-                                        </li>
-                                    </ul>
+                                    <p class="care-chat-widget__message-text" id="care-chat-message-1">Hi, I'm your AI assistant. Can I help with anything?</p>
+                                    
                                 </div>
                             </div>
                             <div
                                 class="care-chat-widget__message-footer care-chat-widget__message-footer--representative">
-
-                                <img class="care-chat-widget__message-profile-image"
-                                    src="https://static.licdn.com/aero-v1/sc/h/5juor428im7mv0i2pkad6t6f2" alt=""
-                                    data-test-id="profile-image"
-                                    data-test-path="https://static.licdn.com/aero-v1/sc/h/5juor428im7mv0i2pkad6t6f2">
-
                                 <p class="care-chat-widget__message-timestamp">
                                     10:23 PM
                                 </p>
                             </div>
                             <!---->
                         </section>
+                    </li>
+                    <li class="care-chat-widget__message care-chat-widget__message--user" data-test-id="message-list-item">
+                      <section class="care-chat-widget__message-details">
+                        <p class="visually-hidden">Arielle Nguyen</p>
+                  <!---->        <div class="care-chat-widget__message-text-container">
+                            <div class="care-chat-widget__message-text-block">
+                                <p class="care-chat-widget__message-text" id="care-chat-message-4">Projects</p>
+                  <!---->          </div>
+                          </div>
+                  <!---->        <div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
+                            <p class="care-chat-widget__message-timestamp">
+                              1:13 AM
+                            </p>
+                          </div>
+                      </section>
                     </li>
                 </ul>
             </section>
@@ -229,7 +186,7 @@ const recruitronUI = `<html class="artdeco osx">
 if (window == window.top) {
   console.log('Before doc is ready...');
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     console.log('Current URL is ' + window.location.href);
     let chatBox = document.createElement('div');
     chatBox.style = "position:fixed;bottom:20px;right:20px;width:400px;height:600px;z-index:255;";
