@@ -1,6 +1,2 @@
-// TODO
-// Chatbox UI handlers
 
-// Chatbox function
-
-// Chatbox fake data for now
+// Can be imported if this file is actually hosted on linkedin.com

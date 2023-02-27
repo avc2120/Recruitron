@@ -132,8 +132,9 @@ const recruitronUI = `<html class="artdeco osx">
                             <!---->
                             <div class="care-chat-widget__message-text-container">
                                 <div class="care-chat-widget__message-text-block">
-                                    <p class="care-chat-widget__message-text" id="care-chat-message-1">Hi, I'm your AI assistant. Can I help with anything?</p>
-                                    
+                                    <p class="care-chat-widget__message-text" id="care-chat-message-1">Hi, I'm your AI
+                                        assistant. Can I help with anything?</p>
+
                                 </div>
                             </div>
                             <div
@@ -145,20 +146,24 @@ const recruitronUI = `<html class="artdeco osx">
                             <!---->
                         </section>
                     </li>
-                    <li class="care-chat-widget__message care-chat-widget__message--user" data-test-id="message-list-item">
-                      <section class="care-chat-widget__message-details">
-                        <p class="visually-hidden">Arielle Nguyen</p>
-                  <!---->        <div class="care-chat-widget__message-text-container">
-                            <div class="care-chat-widget__message-text-block">
-                                <p class="care-chat-widget__message-text" id="care-chat-message-4">Projects</p>
-                  <!---->          </div>
-                          </div>
-                  <!---->        <div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
-                            <p class="care-chat-widget__message-timestamp">
-                              1:13 AM
-                            </p>
-                          </div>
-                      </section>
+                    <li class="care-chat-widget__message care-chat-widget__message--user"
+                        data-test-id="message-list-item">
+                        <section class="care-chat-widget__message-details">
+                            <p class="visually-hidden">Arielle Nguyen</p>
+                            <!---->
+                            <div class="care-chat-widget__message-text-container">
+                                <div class="care-chat-widget__message-text-block">
+                                    <p class="care-chat-widget__message-text" id="care-chat-message-4">Projects</p>
+                                    <!---->
+                                </div>
+                            </div>
+                            <!---->
+                            <div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
+                                <p class="care-chat-widget__message-timestamp">
+                                    1:13 AM
+                                </p>
+                            </div>
+                        </section>
                     </li>
                 </ul>
             </section>
@@ -171,7 +176,30 @@ const recruitronUI = `<html class="artdeco osx">
                 aria-live="assertive" aria-label="Chat status messages">
                 <!---->
             </div>
-
+            <footer class="care-chat-widget-footer" data-test-id="care-chat-widget-footer" aria-label="Help chat">
+                <form name="user-input-chat-message">
+                    <!---->
+                    <section class="care-chat-widget__message-input" data-test-id="care-chat-garfield-message-input">
+                        <div class="care-chat-widget__message-input-container">
+                            <textarea class="care-chat-widget__message-input-textarea" id="chat-message-textarea-input"
+                                data-test-id="textarea-input" placeholder=" "></textarea>
+                            <label for="chat-message-textarea-input" class="care-chat-widget__message-input-label">
+                                Write a message
+                            </label>
+                        </div>
+                        <div class="care-chat-widget__message-input-message-actions-OVERRIDDEN">
+                            <button aria-label="Send"
+                                class="artdeco-button--circle artdeco-button--inverse artdeco-button--1 artdeco-button--tertiary care-chat-widget__message-input-action-button care-chat-widget__message-input-send"
+                                data-test-id="send-button">
+                                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                    class="artdeco-icon" aria-hidden="true" focusable="false">
+                                    <path d="M3 3L6.5 10.5L16 12L6.5 13.5L3 21L22 12L3 3Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </section>
+                </form>
+            </footer>
 
         </div>
 
@@ -194,5 +222,130 @@ if (window == window.top) {
     document.getElementById("application-wrapper").appendChild(chatBox);
     const frag = document.createRange().createContextualFragment(recruitronUI);
     chatBox.appendChild(frag);
+
+
+    // TODO: move this to chatbox.js onced deployed to linkedin.com/talent
+    //(function () {
+      var fakeMsg, fakeNum, isTyping, messages, uctTimer;
+
+      messages = $(".care-chat-widget__message-list");
+
+      sentButton = $(".care-chat-widget__message-input-send");
+
+      fakeNum = 0;
+
+      isTyping = true;
+
+      uctTimer = null;
+
+      window.userTypingClear = function () {
+        return uctTimer = setTimeout(function () {
+          $(".care-chat-widget__message.personal.typing").remove();
+          return isTyping = true;
+        }, 3500);
+      };
+
+      window.setDate = function () {
+        var d, timestamp;
+        timestamp = $("<div>").addClass("timestamp");
+        d = new Date();
+        timestamp.html(
+          `<div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
+                                <p class="care-chat-widget__message-timestamp">`
+          + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
+          + `</p>
+          </div>`
+        );
+        return timestamp.appendTo($('.care-chat-widget__message:last'));
+      };
+
+      window.updateScrollbar = function () {
+        return messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
+          scrollInertia: 10,
+          timeout: 0
+        });
+      };
+
+      fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "How are you doing?", "Pretty good", "How\'s life been treating you?", "It could be worse, thanks", "I\'ve gotta go now", "It was a pleasure chat with you", "Bye :)"];
+
+      setFakeMessage = function () {
+        var typing;
+        typing = $("<div>").append("<span>").addClass("care-chat-widget__message typing");
+        typing.appendTo($('.mCSB_container'));
+        updateScrollbar();
+        return setTimeout(function () {
+          var msg;
+          typing.remove();
+          msg = $("<div>").addClass("care-chat-widget__message");
+          msg.text(fakeMsg[fakeNum]);
+          msg.appendTo($('.mCSB_container'));
+          setDate();
+          updateScrollbar();
+          return fakeNum++;
+        }, 1000 + (Math.random() * 10) * 100);
+      };
+
+      insertMessage = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('entered message');
+
+        var msg, msgText;
+        msgText = $("#chat-message-textarea-input").val();
+        if ($.trim(msgText) === "") {
+          return false;
+        }
+        msg = $("<div>").addClass("care-chat-widget__message care-chat-widget__message--user");
+        msgDetails = `<div class="care-chat-widget__message-text-container">
+        <div class="care-chat-widget__message-text-block">
+            <p class="care-chat-widget__message-text">`+ msgText + `</p>
+        </div>
+        </div>`;
+        msg.append(msgDetails);
+        msg.addClass("care-chat-widget__message--user").appendTo($('.mCSB_container'));
+        setDate();
+        updateScrollbar();
+        $("#chat-message-textarea-input").val(null);
+        $(".care-chat-widget__message.care-chat-widget__message--user.typing").remove();
+        isTyping = true;
+        clearTimeout(uctTimer);
+        if ($.trim(fakeMsg[fakeNum]) === "") {
+          return false;
+        }
+        return setTimeout(function () {
+          return setFakeMessage();
+        }, 500 + (Math.random() * 10) * 100);
+      };
+
+      $(window).on('keydown', function (e) {
+        if (e.which === 13) {
+          insertMessage();
+          return false;
+        }
+      });
+
+      $(window).load(function () {
+        messages.mCustomScrollbar();
+        setTimeout(function () {
+          return setFakeMessage();
+        }, 100);
+      });
+
+      $("#chat-message-textarea-input").on("keydown", function (e) {
+        var typing;
+        if ($("#chat-message-textarea-input") !== "" && isTyping === true && e.which !== 13) {
+          typing = $("<div>").append("<span>").addClass("care-chat-widget__message care-chat-widget__message--user typing");
+          typing.appendTo($('.mCSB_container'));
+          updateScrollbar();
+          isTyping = false;
+          return userTypingClear();
+        }
+      });
+
+      sentButton.on('click', insertMessage);
+
+    //}).call(this);
   });
 }
+
+

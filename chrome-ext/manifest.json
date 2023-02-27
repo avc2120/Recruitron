@@ -24,7 +24,8 @@
         ],
         "js": [
             "jquery.min.js",
-            "content-reader.js"
+            "content-reader.js",
+            "jquery.mCustomScrollbar.concat.min.js"
         ],
         "css": [ "main.css" ],
         "all_frames": true
