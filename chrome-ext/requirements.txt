@@ -1,0 +1,4 @@
+Flask==1.0.2
+Flask-Cors==3.0.10
+jira==3.4.1
+requests==2.28.2
