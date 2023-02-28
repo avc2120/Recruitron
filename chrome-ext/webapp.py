@@ -1,6 +1,6 @@
 import jira
 from jira import JIRA
-from flask import Flask
+from flask import Flask, request, redirect, render_template, jsonify
 from flask_cors import CORS, cross_origin
 from collections import defaultdict, OrderedDict
 
@@ -46,7 +46,7 @@ def create_issue():
     summary = request.args.get('summary')
     description = request.args.get('description')
     issue_dict = {
-    'project': {'key': 'CSE'},
+    'project': {'key': 'HPLT'},
     'summary': summary,
     'description': description,
     'issuetype': {'name': 'Bug'},
