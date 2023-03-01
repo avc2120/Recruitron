@@ -62,6 +62,9 @@ const recruitronUI = `<html class="artdeco osx">
         left: calc(100% - 18px);
         bottom: 18px;
       }
+      .care-chat-widget__header__title {
+        font-size: 18px;
+      }
     </style>
 </head>
 
@@ -140,46 +143,7 @@ const recruitronUI = `<html class="artdeco osx">
                         data-test-id="message-list-item">
                         <!---->
                     </li>
-                    <li class="care-chat-widget__message care-chat-widget__message--vca"
-                        data-test-id="message-list-item">
-                        <section class="care-chat-widget__message-details">
-                            <p class="visually-hidden">Recruitron - Your AI Assistant</p>
-                            <!---->
-                            <div class="care-chat-widget__message-text-container">
-                                <div class="care-chat-widget__message-text-block">
-                                    <p class="care-chat-widget__message-text" id="care-chat-message-1">Hi, I'm your AI
-                                        assistant. Can I help with anything?</p>
-
-                                </div>
-                            </div>
-                            <div
-                                class="care-chat-widget__message-footer care-chat-widget__message-footer--representative">
-                                <p class="care-chat-widget__message-timestamp">
-                                    10:23 PM
-                                </p>
-                            </div>
-                            <!---->
-                        </section>
-                    </li>
-                    <li class="care-chat-widget__message care-chat-widget__message--user"
-                        data-test-id="message-list-item">
-                        <section class="care-chat-widget__message-details">
-                            <p class="visually-hidden">Arielle Nguyen</p>
-                            <!---->
-                            <div class="care-chat-widget__message-text-container">
-                                <div class="care-chat-widget__message-text-block">
-                                    <p class="care-chat-widget__message-text" id="care-chat-message-4">Projects</p>
-                                    <!---->
-                                </div>
-                            </div>
-                            <!---->
-                            <div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
-                                <p class="care-chat-widget__message-timestamp">
-                                    1:13 AM
-                                </p>
-                            </div>
-                        </section>
-                    </li>
+                    
                 </ul>
             </section>
             <!---->
@@ -321,7 +285,7 @@ if (window == window.top) {
     // fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
 
     // 2nd case
-    fakeMsg = ["Hi there, I\'m Recruitron and you?", "I will create a support ticket for you and our team will look into this. Do you want to proceed?", "Great! Creating ticket..."];
+    fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything?", "I will create a support ticket for you and our team will look into this. Do you want to proceed?", "Great! Creating ticket..."];
 
     // 3rd case
     //fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
@@ -340,8 +304,10 @@ if (window == window.top) {
         typing.remove();
         msg = $("<div>").addClass("care-chat-widget__message");
         msgText = fakeMsg[fakeNum];
-        msg.text(msgText);
-        msg.appendTo($('.mCSB_container'));
+        msgDetails = `<div class="care-chat-widget__message-text-block">
+        <p class="care-chat-widget__message-text">` + msgText + `</p></div>`;
+        msg.append(msgDetails);
+        msg.addClass("care-chat-widget__message--vca").appendTo($('.mCSB_container'));
         setDate();
         updateScrollbar();
 
