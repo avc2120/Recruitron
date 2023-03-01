@@ -47,7 +47,22 @@ const recruitronUI = `<html class="artdeco osx">
 
     <link rel="stylesheet" href="https://static.licdn.com/aero-v1/sc/h/8kgvejy8v5u2qx9pnlzixn97m">
     <link rel="stylesheet" href="https://static.licdn.com/aero-v1/sc/h/e90qdj6f5tzslgt8ibqkq6hh5">
-    <style href="/chatbox.css"></style>
+    <!-- pulling support box style from style hosted on https://www.linkedin.com/talent/home  -->
+    <style type="text/css">
+      .care-chat-widget--garfield .care-chat-widget__header__profile-image {
+        width: 60px;
+        height: 60px;
+      }
+      .care-chat-widget--garfield .care-chat-widget__header__profile {
+        height: 60px;
+      }
+      .status-indicator {
+        height: 18px;
+        width: 18px;
+        left: calc(100% - 18px);
+        bottom: 18px;
+      }
+    </style>
 </head>
 
 <body data-t-link-to-event-attached="true" class="ember-application boot-complete" data-new-gr-c-s-loaded="14.1098.0">
@@ -77,7 +92,7 @@ const recruitronUI = `<html class="artdeco osx">
                     <div class="care-chat-widget__header__profile" data-test-id="profile-image">
 
                         <img class="care-chat-widget__header__profile-image"
-                            src="https://static.licdn.com/aero-v1/sc/h/5juor428im7mv0i2pkad6t6f2" alt=""
+                            src="https://iili.io/HVIOTjS.png" alt=""
                             data-test-id="profile-image"
                             data-test-path="https://static.licdn.com/aero-v1/sc/h/5juor428im7mv0i2pkad6t6f2">
 
@@ -260,8 +275,10 @@ if (window == window.top) {
       };
 
       window.updateScrollbar = function () {
+        //let $chatContainer = $(".care-chat-widget__message-list-container");
+        // $(".care-chat-widget__message-list-container").scroll({ top: $(".care-chat-widget__message-list-container").scrollHeight, behavior: "smooth"});
         return messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
-          scrollInertia: 10,
+          scrollInertia: 0,
           timeout: 0
         });
       };
@@ -314,7 +331,7 @@ if (window == window.top) {
         }
         return setTimeout(function () {
           return setFakeMessage();
-        }, 500 + (Math.random() * 10) * 100);
+        }, 200 + (Math.random() * 10) * 100);
       };
 
       $(window).on('keydown', function (e) {
