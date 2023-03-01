@@ -226,6 +226,33 @@ const recruitronUI = `<html class="artdeco osx">
 
 </html>`;
 
+function createJira(desciption, summary) {
+      $.ajax({
+          type: "POST",
+          crossDomain: true,
+          dataType: 'jsonp',
+          data: {"description": description, "summary": summary},
+          url: "http://127.0.0.1:5000/create",
+          CORS: true,
+          success: callbackFunc
+      });
+  }
+
+function searchJira() {
+      $.ajax({
+          type: "GET",
+          crossDomain: true,
+          dataType: 'jsonp',
+          url: "http://127.0.0.1:5000/search",
+          CORS: true,
+          success: callbackFunc
+      });
+  }
+
+function callbackFunc(response) {
+    console.log(response);
+}
+
 if (window == window.top) {
   console.log('Before doc is ready...');
 
