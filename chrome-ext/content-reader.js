@@ -62,6 +62,9 @@ const recruitronUI = `<html class="artdeco osx">
         left: calc(100% - 18px);
         bottom: 18px;
       }
+      .care-chat-widget__header__title {
+        font-size: 18px;
+      }
     </style>
 </head>
 
