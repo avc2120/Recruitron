@@ -226,31 +226,38 @@ const recruitronUI = `<html class="artdeco osx">
 
 </html>`;
 
-function createJira(desciption, summary) {
-      $.ajax({
-          type: "POST",
-          crossDomain: true,
-          dataType: 'jsonp',
-          data: {"description": description, "summary": summary},
-          url: "http://127.0.0.1:5000/create",
-          CORS: true,
-          success: callbackFunc
-      });
-  }
+function createJira(desc, sum) {
+  // TODO: fix callback reference error and remove this line
+  window.open('https://jira01.corp.linkedin.com:8443/browse/HPLT-55856', '_blank');
+
+  let description = desc || 'test description';
+  let summary = sum || 'test summary';
+  $.ajax({
+    type: "POST",
+    crossDomain: true,
+    dataType: 'jsonp',
+    data: { "description": description, "summary": summary },
+    url: "http://127.0.0.1:5000/create",
+    CORS: true,
+  }).done(onJiraSuccess);
+}
 
 function searchJira() {
-      $.ajax({
-          type: "GET",
-          crossDomain: true,
-          dataType: 'jsonp',
-          url: "http://127.0.0.1:5000/search",
-          CORS: true,
-          success: callbackFunc
-      });
-  }
+  $.ajax({
+    type: "GET",
+    crossDomain: true,
+    dataType: 'jsonp',
+    url: "http://127.0.0.1:5000/search",
+    CORS: true,
+    success: callbackFunc
+  });
+}
 
-function callbackFunc(response) {
-    console.log(response);
+function onJiraSuccess(response) {
+  // not firing due to create?callback=jQuery1910991603221270617_1677657199085&description=test+description&summary=test+summary&_=1677657199086:1 Uncaught ReferenceError: HPLT is not defined
+  console.log(response);
+  url = 'https://jira01.corp.linkedin.com:8443/browse/' + ('HPLT-55856' || response);
+  window.open(url, '_blank');
 }
 
 if (window == window.top) {
@@ -268,125 +275,144 @@ if (window == window.top) {
 
     // TODO: move this to chatbox.js onced deployed to linkedin.com/talent
     //(function () {
-      var fakeMsg, fakeNum, isTyping, messages, uctTimer;
+    var fakeMsg, fakeNum, isTyping, messages, uctTimer;
 
-      messages = $(".care-chat-widget__message-list");
+    messages = $(".care-chat-widget__message-list");
 
-      sentButton = $(".care-chat-widget__message-input-send");
+    sentButton = $(".care-chat-widget__message-input-send");
 
-      fakeNum = 0;
+    fakeNum = 0;
 
-      isTyping = true;
+    isTyping = true;
 
-      uctTimer = null;
+    uctTimer = null;
 
-      window.userTypingClear = function () {
-        return uctTimer = setTimeout(function () {
-          $(".care-chat-widget__message.personal.typing").remove();
-          return isTyping = true;
-        }, 3500);
-      };
+    window.userTypingClear = function () {
+      return uctTimer = setTimeout(function () {
+        $(".care-chat-widget__message.personal.typing").remove();
+        return isTyping = true;
+      }, 3500);
+    };
 
-      window.setDate = function () {
-        var d, timestamp;
-        timestamp = $("<div>").addClass("timestamp");
-        d = new Date();
-        timestamp.html(
-          `<div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
+    window.setDate = function () {
+      var d, timestamp;
+      timestamp = $("<div>").addClass("timestamp");
+      d = new Date();
+      timestamp.html(
+        `<div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
                                 <p class="care-chat-widget__message-timestamp">`
-          + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
-          + `</p>
+        + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
+        + `</p>
           </div>`
-        );
-        return timestamp.appendTo($('.care-chat-widget__message:last'));
-      };
+      );
+      return timestamp.appendTo($('.care-chat-widget__message:last'));
+    };
 
-      window.updateScrollbar = function () {
-        //let $chatContainer = $(".care-chat-widget__message-list-container");
-        // $(".care-chat-widget__message-list-container").scroll({ top: $(".care-chat-widget__message-list-container").scrollHeight, behavior: "smooth"});
-        return messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
-          scrollInertia: 0,
-          timeout: 0
-        });
-      };
+    window.updateScrollbar = function () {
+      //let $chatContainer = $(".care-chat-widget__message-list-container");
+      // $(".care-chat-widget__message-list-container").scroll({ top: $(".care-chat-widget__message-list-container").scrollHeight, behavior: "smooth"});
+      return messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
+        scrollInertia: 0,
+        timeout: 0
+      });
+    };
 
-      fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "How are you doing?", "Pretty good", "How\'s life been treating you?", "It could be worse, thanks", "I\'ve gotta go now", "It was a pleasure chat with you", "Bye :)"];
+    // 1st case
+    // fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
 
-      setFakeMessage = function () {
-        var typing;
-        typing = $("<div>").append("<span>").addClass("care-chat-widget__message typing");
-        typing.appendTo($('.mCSB_container'));
+    // 2nd case
+    fakeMsg = ["Hi there, I\'m Recruitron and you?", "I will create a support ticket for you and our team will look into this. Do you want to proceed?", "Great! Creating ticket..."];
+
+    // 3rd case
+    //fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
+
+    const actionPrompts = {
+      "Great! Creating ticket...": createJira
+    }
+
+    setFakeMessage = function () {
+      var typing;
+      typing = $("<div>").append("<span>").addClass("care-chat-widget__message typing");
+      typing.appendTo($('.mCSB_container'));
+      updateScrollbar();
+      return setTimeout(function () {
+        var msg;
+        typing.remove();
+        msg = $("<div>").addClass("care-chat-widget__message");
+        msgText = fakeMsg[fakeNum];
+        msg.text(msgText);
+        msg.appendTo($('.mCSB_container'));
+        setDate();
         updateScrollbar();
-        return setTimeout(function () {
-          var msg;
-          typing.remove();
-          msg = $("<div>").addClass("care-chat-widget__message");
-          msg.text(fakeMsg[fakeNum]);
-          msg.appendTo($('.mCSB_container'));
-          setDate();
-          updateScrollbar();
-          return fakeNum++;
-        }, 1000 + (Math.random() * 10) * 100);
-      };
 
-      insertMessage = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('entered message');
-
-        var msg, msgText;
-        msgText = $("#chat-message-textarea-input").val();
-        if ($.trim(msgText) === "") {
-          return false;
+        // Special actions based on prompt mapping
+        if (actionPrompts[msgText]) {
+          actionPrompts[msgText]();
+          // window.open(URL, '_blank');
         }
-        msg = $("<div>").addClass("care-chat-widget__message care-chat-widget__message--user");
-        msgDetails = `<div class="care-chat-widget__message-text-container">
+
+        return fakeNum++;
+      }, 1000 + (Math.random() * 10) * 100);
+    };
+
+    insertMessage = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('entered message');
+
+      var msg, msgText;
+      msgText = $("#chat-message-textarea-input").val();
+      if ($.trim(msgText) === "") {
+        return false;
+      }
+      msg = $("<div>").addClass("care-chat-widget__message care-chat-widget__message--user");
+      msgDetails = `<div class="care-chat-widget__message-text-container">
         <div class="care-chat-widget__message-text-block">
             <p class="care-chat-widget__message-text">`+ msgText + `</p>
         </div>
         </div>`;
-        msg.append(msgDetails);
-        msg.addClass("care-chat-widget__message--user").appendTo($('.mCSB_container'));
-        setDate();
+      msg.append(msgDetails);
+      msg.addClass("care-chat-widget__message--user").appendTo($('.mCSB_container'));
+      setDate();
+      updateScrollbar();
+      $("#chat-message-textarea-input").val(null);
+      $(".care-chat-widget__message.care-chat-widget__message--user.typing").remove();
+      isTyping = true;
+      clearTimeout(uctTimer);
+      if ($.trim(fakeMsg[fakeNum]) === "") {
+        return false;
+      }
+      return setTimeout(function () {
+        return setFakeMessage();
+      }, 200 + (Math.random() * 10) * 100);
+    };
+
+    $(window).on('keydown', function (e) {
+      if (e.which === 13) {
+        insertMessage();
+        return false;
+      }
+    });
+
+    $(window).load(function () {
+      messages.mCustomScrollbar();
+      setTimeout(function () {
+        return setFakeMessage();
+      }, 100);
+    });
+
+    $("#chat-message-textarea-input").on("keydown", function (e) {
+      var typing;
+      if ($("#chat-message-textarea-input") !== "" && isTyping === true && e.which !== 13) {
+        typing = $("<div>").append("<span>").addClass("care-chat-widget__message care-chat-widget__message--user typing");
+        typing.appendTo($('.mCSB_container'));
         updateScrollbar();
-        $("#chat-message-textarea-input").val(null);
-        $(".care-chat-widget__message.care-chat-widget__message--user.typing").remove();
-        isTyping = true;
-        clearTimeout(uctTimer);
-        if ($.trim(fakeMsg[fakeNum]) === "") {
-          return false;
-        }
-        return setTimeout(function () {
-          return setFakeMessage();
-        }, 200 + (Math.random() * 10) * 100);
-      };
+        isTyping = false;
+        return userTypingClear();
+      }
+    });
 
-      $(window).on('keydown', function (e) {
-        if (e.which === 13) {
-          insertMessage();
-          return false;
-        }
-      });
-
-      $(window).load(function () {
-        messages.mCustomScrollbar();
-        setTimeout(function () {
-          return setFakeMessage();
-        }, 100);
-      });
-
-      $("#chat-message-textarea-input").on("keydown", function (e) {
-        var typing;
-        if ($("#chat-message-textarea-input") !== "" && isTyping === true && e.which !== 13) {
-          typing = $("<div>").append("<span>").addClass("care-chat-widget__message care-chat-widget__message--user typing");
-          typing.appendTo($('.mCSB_container'));
-          updateScrollbar();
-          isTyping = false;
-          return userTypingClear();
-        }
-      });
-
-      sentButton.on('click', insertMessage);
+    sentButton.on('click', insertMessage);
 
     //}).call(this);
   });

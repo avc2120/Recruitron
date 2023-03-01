@@ -8,5 +8,7 @@
 
 # Make sure you are connected to company VPN. Will need it for Jira API to work
 
+# Install jira and flask-cors package
+`pip install jira, flask-cors`
 # Run Flask App and enter in username and password when prompted
-Run python3 app.py
+`python3 webapp.py`
