@@ -282,10 +282,10 @@ if (window == window.top) {
     };
 
     // 1st case
-    fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
+    // fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
 
     // 2nd case
-    // fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything?", "I will create a support ticket for you and our team will look into this. Do you want to proceed?", "Great! Creating ticket..."];
+    fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything?", "I will create a support ticket for you and our team will look into this. Do you want to proceed?", "Great! Creating ticket..."];
 
     // 3rd case
     //fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
