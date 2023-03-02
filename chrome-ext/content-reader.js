@@ -378,6 +378,6 @@ if (window == window.top) {
       }
     });
 
-    sentButton.on("click", insertMessage);
+    sentButton.on('click', insertMessage);
   });
 }
