@@ -321,14 +321,14 @@ if (window == window.top) {
 
     // 2nd case - latest feature + project adoption
     // To detect no hiring project, we can scrape the current page and feed to prompt api
-    // fakeMsg = ["Hi there, you don't have any hiring project. Using project will boost your productivity. Do you want to know more?", // sure
-    // `A project is an organizational space in Recruiter where you can search for candidates and save all your work in
-    // one central location, so you and your team members can easily access everything you need in one place. You
-    // can use projects to work on current job openings, for building future pipelines of talent, or to track current
-    // employees for future openings within your organization.`, // ok  
-    // `Project's new feature is Project Overview, where recruiters can track project health and get actionable insights. 
-    // You can see important tasks or updates that need your immediate attention`, //ok, create 1 project for me
-    // `Great! Creating project...`];
+    fakeMsg = ["Hi there, you don't have any hiring project. Using project will boost your productivity. Do you want to know more?", // sure
+    `A project is an organizational space in Recruiter where you can search for candidates and save all your work in
+    one central location, so you and your team members can easily access everything you need in one place. You
+    can use projects to work on current job openings, for building future pipelines of talent, or to track current
+    employees for future openings within your organization. For more info, see https://training.talent.linkedin.com/increase-efficiency-with-projects/513449`, // ok  
+    `Project's new feature is Project Overview, where recruiters can track project health and get actionable insights. 
+    You can see important tasks or updates that need your immediate attention`, //ok, create 1 project for me
+    `Great! Creating project...`];
 
     const actionPrompts = {
       "Great! Creating ticket...\n": createJira,
