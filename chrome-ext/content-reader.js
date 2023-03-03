@@ -310,7 +310,7 @@ if (window == window.top) {
       //   });
     };
 
-
+    // 1st case - Q&A & jira
     fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything today?",
       "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
       "I’m sorry you are frustrated. Make sure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number. For more info, see: <a href='https://www.linkedin.com/help/recruiter/answer/a412243'></a>",
@@ -318,6 +318,17 @@ if (window == window.top) {
       "Great! Searching Jira...\n",
       "Would you like me to create a Jira ticket instead?",
       "Great! Creating ticket...\n"];
+
+    // 2nd case - latest feature + project adoption
+    // To detect no hiring project, we can scrape the current page and feed to prompt api
+    // fakeMsg = ["Hi there, you don't have any hiring project. Using project will boost your productivity. Do you want to know more?", // sure
+    // `A project is an organizational space in Recruiter where you can search for candidates and save all your work in
+    // one central location, so you and your team members can easily access everything you need in one place. You
+    // can use projects to work on current job openings, for building future pipelines of talent, or to track current
+    // employees for future openings within your organization.`, // ok  
+    // `Project's new feature is Project Overview, where recruiters can track project health and get actionable insights. 
+    // You can see important tasks or updates that need your immediate attention`, //ok, create 1 project for me
+    // `Great! Creating project...`];
 
     const actionPrompts = {
       "Great! Creating ticket...\n": createJira,
