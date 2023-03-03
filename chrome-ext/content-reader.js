@@ -189,43 +189,62 @@ const recruitronUI = `<html class="artdeco osx">
 </html>`;
 
 function createJira(desc, sum) {
-  // TODO: fix callback reference error and remove this line
-  window.open(
-    "https://jira01.corp.linkedin.com:8443/browse/HPLT-55856",
-    "_blank"
-  );
-
-  let description = desc || "test description";
-  let summary = sum || "test summary";
+  let description = desc || "Test Ticket for GAI Hackathon";
+  let summary = sum || 'Unable to import candidate resumes';
   $.ajax({
     type: "POST",
     crossDomain: true,
-    dataType: "jsonp",
-    data: { description: description, summary: summary },
+    data: { "description": description, "summary": summary },
     url: "http://127.0.0.1:5000/create",
     CORS: true,
-  }).done(onJiraSuccess);
+    success: function(data) {
+      json_data = JSON.parse(data)
+      console.log(json_data);
+      console.log("CREATE SUCCESS");
+      setFakeMessageFromAPIresponse(formatJira(json_data));
+      setTimeout(function() {
+        window.open(json_data[0]['url'], '_blank');
+      }, 2000);
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
 }
 
 function searchJira() {
   $.ajax({
     type: "GET",
     crossDomain: true,
-    dataType: "jsonp",
     url: "http://127.0.0.1:5000/search",
     CORS: true,
-    success: callbackFunc,
+    success: function(data) {
+      json_data = JSON.parse(data)
+      console.log(json_data);
+      console.log("SEARCH SUCCESS");
+      setFakeMessageFromAPIresponse(formatJira(json_data));
+    },
+    error: function(error) {
+      console.log(error);
+    }
   });
 }
 
-function onJiraSuccess(response) {
-  // not firing due to create?callback=jQuery1910991603221270617_1677657199085&description=test+description&summary=test+summary&_=1677657199086:1 Uncaught ReferenceError: HPLT is not defined
-  console.log(response);
-  url =
-    "https://jira01.corp.linkedin.com:8443/browse/" +
-    ("HPLT-55856" || response);
-  window.open(url, "_blank");
+formatJira = function(results) {
+  stringresult = '';
+  results.forEach(function(result) {
+      stringresult = stringresult + "<a href=" + result["url"] + ">";
+      stringresult += result["Key"];
+      stringresult += "</a>";
+      stringresult += ": ";
+      stringresult += result["Summary"];
+      stringresult += "\n";
+
+    });
+  console.log(stringresult);
+  return stringresult
 }
+
 
 if (window == window.top) {
   console.log("Before doc is ready...");
@@ -291,26 +310,19 @@ if (window == window.top) {
       //   });
     };
 
-    // 1st case
-    fakeMsg = [
-      "Hi there, I'm Recruitron and you?",
-      "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
-      "Ensure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number",
-      "It was a pleasure chat with you :)",
-    ];
 
-    // 2nd case
-    fakeMsg = [
-      "Hi there, I'm Recruitron, your AI assistant. Can I help you with anything?",
-      "This sounds like a bug or feature request. Let me see if there are any pending tickets relevant to this issue...Looks like there are no relevant tickets right now.",
-      "Current open issues are: CSE-4231: Seat Transfer Failure, CSE-4232: Candidate not moved automatically through pipeline",
-      "I can create a support ticket for you and our team will look into this. Do you want to proceed?",
-      "Great! Creating ticket...HPLT-55856",
-    ];
+    fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything today?",
+      "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
+      "I’m sorry you are frustrated. Make sure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number. For more info, see: <a href='https://www.linkedin.com/help/recruiter/answer/a412243'></a>",
+      "This sounds like a bug or feature request. Would you like me to search if there are pending tickets relevant to this issue?",
+      "Great! Searching Jira...\n",
+      "Would you like me to create a Jira ticket instead?",
+      "Great! Creating ticket...\n"];
 
     const actionPrompts = {
-      "Great! Creating ticket...": createJira,
-    };
+      "Great! Creating ticket...\n": createJira,
+      "Great! Searching Jira...\n": searchJira
+    }
 
     setFakeMessage = function () {
       var typing;
@@ -338,12 +350,37 @@ if (window == window.top) {
 
         // Special actions based on prompt mapping
         if (actionPrompts[msgText]) {
-          actionPrompts[msgText]();
-          // window.open(URL, '_blank');
+          actionPrompts[msgText]()
         }
 
         return fakeNum++;
       }, 1000 + Math.random() * 10 * 100);
+    };
+
+    setFakeMessageFromAPIresponse = function (msgText) {
+      var typing;
+      typing = $("<div>").append("<span>").addClass("care-chat-widget__message typing");
+      typing.appendTo($('.mCSB_container'));
+      updateScrollbar();
+      return setTimeout(function () {
+        var msg;
+        typing.remove();
+        msg = $("<div>").addClass("care-chat-widget__message");
+
+        // Special actions based on prompt mapping
+        if (actionPrompts[msgText]) {
+          result = actionPrompts[msgText]()
+        }
+
+        msgDetails = `<div class="care-chat-widget__message-text-block">
+        <p class="care-chat-widget__message-text">` + msgText + `</p></div>`;
+        msg.append(msgDetails);
+        msg.addClass("care-chat-widget__message--vca").appendTo($('.mCSB_container'));
+        setDate();
+        updateScrollbar();
+
+        return fakeNum++;
+      }, 1000 + (Math.random() * 10) * 100);
     };
 
     insertMessage = function (e) {

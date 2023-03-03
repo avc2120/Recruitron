@@ -3,6 +3,7 @@ from jira import JIRA
 from flask import Flask, request, redirect, render_template, jsonify
 from flask_cors import CORS, cross_origin
 from collections import defaultdict, OrderedDict
+import json
 
 app = Flask(__name__)
 
@@ -17,34 +18,25 @@ def getJira(username, password):
     options = {'verify': False, 'server': 'https://jira01.corp.linkedin.com:8443'}
     return JIRA(basic_auth=(username, password), options = options)
 
-@app.route("/search")
+@app.route("/search", methods = ['GET'])
 @cross_origin()
 def search_issues():
     # create a search filter in jira to search by
     issues = jira.search_issues("filter=112950")
-
-    print(issues)
-
     results = []
     for issue in issues:
         result = OrderedDict()
-        result["Issue key"] = issue.key
+        result["Key"] = issue.key
+        result["Summary"] = issue.fields.summary
         result["Status"] = issue.fields.status.name
-        result["Priority"] = issue.fields.priority.name
-        result["Assignee"] = issue.fields.assignee.key
-        result["Created"] = issue.fields.created
-        result["Updated"] = issue.fields.updated
-        result["Last Viewed"] = issue.fields.lastViewed
-        if issue.fields.components:
-            result["Components"] = issue.fields.components[0].name
-        result["Due Date"] = issue.fields.duedate
+        result["url"] = "https://jira01.corp.linkedin.com:8443/browse/" + issue.key
         results.append(result)
-    return str(results)
+    return json.dumps(results)
 
-@app.route("/create")
+@app.route("/create", methods = ['POST'])
 def create_issue():
-    summary = request.args.get('summary')
-    description = request.args.get('description')
+    summary = request.args.get('summary', 'Test Ticket for GAI Hackathon')
+    description = request.args.get('description', 'Unable to import candidate resumes')
     issue_dict = {
     'project': {'key': 'HPLT'},
     'summary': summary,
@@ -52,8 +44,25 @@ def create_issue():
     'issuetype': {'name': 'Bug'},
     }
     new_issue = jira.create_issue(fields=issue_dict)
-    return str(new_issue)
 
+    results = []
+    result = {}
+    result["Key"] = new_issue.key
+    result["Status"] = new_issue.fields.status.name
+    result["Summary"] = new_issue.fields.summary
+    result["url"] = "https://jira01.corp.linkedin.com:8443/browse/" + new_issue.key
+    results.append(result)
+    return json.dumps(results)
+
+def transformToString(results):
+    stringresult = ''
+    for result in results:
+        stringresult = stringresult + "<a ref=" + result["url"] + ">"
+        stringresult += result["Key"]
+        stringresult += ": "
+        stringresult += result["Summary"]
+        stringresult += "</a>,  "
+    return stringresult
 
 if __name__ == "__main__":
     # here is starting of the development HTTP server
