@@ -281,26 +281,32 @@ if (window == window.top) {
     };
 
     window.updateScrollbar = function () {
-      return messagesContainer
-        .mCustomScrollbar("update")
-        .mCustomScrollbar("scrollTo", "bottom", {
-          scrollInertia: 0,
-          timeout: 0,
-        });
+      return;
+      // use following for demo
+      // return messagesContainer
+      //   .mCustomScrollbar("update")
+      //   .mCustomScrollbar("scrollTo", "bottom", {
+      //     scrollInertia: 0,
+      //     timeout: 0,
+      //   });
     };
 
     // 1st case
-    // fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
+    fakeMsg = [
+      "Hi there, I'm Recruitron and you?",
+      "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
+      "Ensure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number",
+      "It was a pleasure chat with you :)",
+    ];
 
     // 2nd case
     fakeMsg = [
       "Hi there, I'm Recruitron, your AI assistant. Can I help you with anything?",
-      "I will create a support ticket for you and our team will look into this. Do you want to proceed?",
-      "Great! Creating ticket...",
+      "This sounds like a bug or feature request. Let me see if there are any pending tickets relevant to this issue...Looks like there are no relevant tickets right now.",
+      "Current open issues are: CSE-4231: Seat Transfer Failure, CSE-4232: Candidate not moved automatically through pipeline",
+      "I can create a support ticket for you and our team will look into this. Do you want to proceed?",
+      "Great! Creating ticket...HPLT-55856",
     ];
-
-    // 3rd case
-    //fakeMsg = ["Hi there, I\'m Recruitron and you?", "Nice to meet you", "It was a pleasure chat with you", "Bye :)"];
 
     const actionPrompts = {
       "Great! Creating ticket...": createJira,
