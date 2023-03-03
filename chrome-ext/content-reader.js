@@ -134,7 +134,7 @@ const recruitronUI = `<html class="artdeco osx">
             </header>
 
 
-            <section class="care-chat-widget__message-list-container" aria-live="assertive" aria-relevant="additions"
+            <section class="care-chat-widget__message-list-container mCustomScrollbar" aria-live="assertive" aria-relevant="additions"
                 aria-label="Chat messages list" role="log" data-test-id="message-list" tabindex="0">
                 <ul class="care-chat-widget__message-list">
                     <li class="care-chat-widget__message care-chat-widget__message--response"
@@ -246,6 +246,8 @@ if (window == window.top) {
 
     messages = $(".care-chat-widget__message-list");
 
+    messagesContainer = $(".care-chat-widget__message-list-container");
+
     sentButton = $(".care-chat-widget__message-input-send");
 
     fakeNum = 0;
@@ -279,14 +281,14 @@ if (window == window.top) {
     };
 
     window.updateScrollbar = function () {
-      //let $chatContainer = $(".care-chat-widget__message-list-container");
-      // $(".care-chat-widget__message-list-container").scroll({ top: $(".care-chat-widget__message-list-container").scrollHeight, behavior: "smooth"});
-      return messages
-        .mCustomScrollbar("update")
-        .mCustomScrollbar("scrollTo", "bottom", {
-          scrollInertia: 0,
-          timeout: 0,
-        });
+      return;
+      // use following for demo
+      // return messagesContainer
+      //   .mCustomScrollbar("update")
+      //   .mCustomScrollbar("scrollTo", "bottom", {
+      //     scrollInertia: 0,
+      //     timeout: 0,
+      //   });
     };
 
     // 1st case
@@ -393,7 +395,7 @@ if (window == window.top) {
     });
 
     $(window).load(function () {
-      messages.mCustomScrollbar();
+      messagesContainer.mCustomScrollbar();
       setTimeout(function () {
         return setFakeMessage();
       }, 100);
