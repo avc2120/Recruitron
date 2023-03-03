@@ -1,5 +1,3 @@
-
-
 const recruitronUI = `<html class="artdeco osx">
 
 <head>
@@ -192,15 +190,18 @@ const recruitronUI = `<html class="artdeco osx">
 
 function createJira(desc, sum) {
   // TODO: fix callback reference error and remove this line
-  window.open('https://jira01.corp.linkedin.com:8443/browse/HPLT-55856', '_blank');
+  window.open(
+    "https://jira01.corp.linkedin.com:8443/browse/HPLT-55856",
+    "_blank"
+  );
 
-  let description = desc || 'test description';
-  let summary = sum || 'test summary';
+  let description = desc || "test description";
+  let summary = sum || "test summary";
   $.ajax({
     type: "POST",
     crossDomain: true,
-    dataType: 'jsonp',
-    data: { "description": description, "summary": summary },
+    dataType: "jsonp",
+    data: { description: description, summary: summary },
     url: "http://127.0.0.1:5000/create",
     CORS: true,
   }).done(onJiraSuccess);
@@ -210,32 +211,34 @@ function searchJira() {
   $.ajax({
     type: "GET",
     crossDomain: true,
-    dataType: 'jsonp',
+    dataType: "jsonp",
     url: "http://127.0.0.1:5000/search",
     CORS: true,
-    success: callbackFunc
+    success: callbackFunc,
   });
 }
 
 function onJiraSuccess(response) {
   // not firing due to create?callback=jQuery1910991603221270617_1677657199085&description=test+description&summary=test+summary&_=1677657199086:1 Uncaught ReferenceError: HPLT is not defined
   console.log(response);
-  url = 'https://jira01.corp.linkedin.com:8443/browse/' + ('HPLT-55856' || response);
-  window.open(url, '_blank');
+  url =
+    "https://jira01.corp.linkedin.com:8443/browse/" +
+    ("HPLT-55856" || response);
+  window.open(url, "_blank");
 }
 
 if (window == window.top) {
-  console.log('Before doc is ready...');
+  console.log("Before doc is ready...");
 
   $(document).ready(function () {
-    console.log('Current URL is ' + window.location.href);
-    let chatBox = document.createElement('div');
-    chatBox.style = "position:fixed;bottom:20px;right:20px;width:400px;height:600px;z-index:255;";
+    console.log("Current URL is " + window.location.href);
+    let chatBox = document.createElement("div");
+    chatBox.style =
+      "position:fixed;bottom:20px;right:20px;width:400px;height:600px;z-index:255;";
     chatBox.id = "chat-box";
     document.getElementById("application-wrapper").appendChild(chatBox);
     const frag = document.createRange().createContextualFragment(recruitronUI);
     chatBox.appendChild(frag);
-
 
     // TODO: move this to chatbox.js onced deployed to linkedin.com/talent
     //(function () {
@@ -252,10 +255,10 @@ if (window == window.top) {
     uctTimer = null;
 
     window.userTypingClear = function () {
-      return uctTimer = setTimeout(function () {
+      return (uctTimer = setTimeout(function () {
         $(".care-chat-widget__message.personal.typing").remove();
-        return isTyping = true;
-      }, 3500);
+        return (isTyping = true);
+      }, 3500));
     };
 
     window.setDate = function () {
@@ -264,55 +267,70 @@ if (window == window.top) {
       d = new Date();
       timestamp.html(
         `<div class="care-chat-widget__message-footer care-chat-widget__message-footer--user">
-                                <p class="care-chat-widget__message-timestamp">`
-        + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
-        + `</p>
+                                <p class="care-chat-widget__message-timestamp">` +
+          d.getHours() +
+          ":" +
+          (d.getMinutes() < 10 ? "0" : "") +
+          d.getMinutes() +
+          `</p>
           </div>`
       );
-      return timestamp.appendTo($('.care-chat-widget__message:last'));
+      return timestamp.appendTo($(".care-chat-widget__message:last"));
     };
 
     window.updateScrollbar = function () {
       //let $chatContainer = $(".care-chat-widget__message-list-container");
       // $(".care-chat-widget__message-list-container").scroll({ top: $(".care-chat-widget__message-list-container").scrollHeight, behavior: "smooth"});
-      return messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
-        scrollInertia: 0,
-        timeout: 0
-      });
+      return messages
+        .mCustomScrollbar("update")
+        .mCustomScrollbar("scrollTo", "bottom", {
+          scrollInertia: 0,
+          timeout: 0,
+        });
     };
 
     // 1st case
-    fakeMsg = ["Hi there, I\'m Recruitron and you?",
-     "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
-     "Ensure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number",
-     "It was a pleasure chat with you :)"];
+    fakeMsg = [
+      "Hi there, I'm Recruitron and you?",
+      "You can bulk import candidates by navigating to your Project > Project Settings > Import Candidates. The file is limited to 200 candidates and must be in CSV format. Most spreadsheets or database applications will export to this format.",
+      "Ensure the spreadsheet contains the following columns in the following order: first name, last name, email, phone number",
+      "It was a pleasure chat with you :)",
+    ];
 
     // 2nd case
-    fakeMsg = ["Hi there, I\'m Recruitron, your AI assistant. Can I help you with anything?",
+    fakeMsg = [
+      "Hi there, I'm Recruitron, your AI assistant. Can I help you with anything?",
       "This sounds like a bug or feature request. Let me see if there are any pending tickets relevant to this issue...Looks like there are no relevant tickets right now.",
       "Current open issues are: CSE-4231: Seat Transfer Failure, CSE-4232: Candidate not moved automatically through pipeline",
       "I can create a support ticket for you and our team will look into this. Do you want to proceed?",
-      "Great! Creating ticket...HPLT-55856"];
-
+      "Great! Creating ticket...HPLT-55856",
+    ];
 
     const actionPrompts = {
-      "Great! Creating ticket...": createJira
-    }
+      "Great! Creating ticket...": createJira,
+    };
 
     setFakeMessage = function () {
       var typing;
-      typing = $("<div>").append("<span>").addClass("care-chat-widget__message typing");
-      typing.appendTo($('.mCSB_container'));
+      typing = $("<div>")
+        .append("<span>")
+        .addClass("care-chat-widget__message typing");
+      typing.appendTo($(".mCSB_container"));
       updateScrollbar();
       return setTimeout(function () {
         var msg;
         typing.remove();
         msg = $("<div>").addClass("care-chat-widget__message");
         msgText = fakeMsg[fakeNum];
-        msgDetails = `<div class="care-chat-widget__message-text-block">
-        <p class="care-chat-widget__message-text">` + msgText + `</p></div>`;
+        msgDetails =
+          `<div class="care-chat-widget__message-text-block">
+        <p class="care-chat-widget__message-text">` +
+          msgText +
+          `</p></div>`;
         msg.append(msgDetails);
-        msg.addClass("care-chat-widget__message--vca").appendTo($('.mCSB_container'));
+        msg
+          .addClass("care-chat-widget__message--vca")
+          .appendTo($(".mCSB_container"));
         setDate();
         updateScrollbar();
 
@@ -323,31 +341,40 @@ if (window == window.top) {
         }
 
         return fakeNum++;
-      }, 1000 + (Math.random() * 10) * 100);
+      }, 1000 + Math.random() * 10 * 100);
     };
 
     insertMessage = function (e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log('entered message');
+      console.log("entered message");
 
       var msg, msgText;
       msgText = $("#chat-message-textarea-input").val();
       if ($.trim(msgText) === "") {
         return false;
       }
-      msg = $("<div>").addClass("care-chat-widget__message care-chat-widget__message--user");
-      msgDetails = `<div class="care-chat-widget__message-text-container">
+      msg = $("<div>").addClass(
+        "care-chat-widget__message care-chat-widget__message--user"
+      );
+      msgDetails =
+        `<div class="care-chat-widget__message-text-container">
         <div class="care-chat-widget__message-text-block">
-            <p class="care-chat-widget__message-text">`+ msgText + `</p>
+            <p class="care-chat-widget__message-text">` +
+        msgText +
+        `</p>
         </div>
         </div>`;
       msg.append(msgDetails);
-      msg.addClass("care-chat-widget__message--user").appendTo($('.mCSB_container'));
+      msg
+        .addClass("care-chat-widget__message--user")
+        .appendTo($(".mCSB_container"));
       setDate();
       updateScrollbar();
       $("#chat-message-textarea-input").val(null);
-      $(".care-chat-widget__message.care-chat-widget__message--user.typing").remove();
+      $(
+        ".care-chat-widget__message.care-chat-widget__message--user.typing"
+      ).remove();
       isTyping = true;
       clearTimeout(uctTimer);
       if ($.trim(fakeMsg[fakeNum]) === "") {
@@ -355,10 +382,10 @@ if (window == window.top) {
       }
       return setTimeout(function () {
         return setFakeMessage();
-      }, 200 + (Math.random() * 10) * 100);
+      }, 200 + Math.random() * 10 * 100);
     };
 
-    $(window).on('keydown', function (e) {
+    $(window).on("keydown", function (e) {
       if (e.which === 13) {
         insertMessage();
         return false;
@@ -374,19 +401,23 @@ if (window == window.top) {
 
     $("#chat-message-textarea-input").on("keydown", function (e) {
       var typing;
-      if ($("#chat-message-textarea-input") !== "" && isTyping === true && e.which !== 13) {
-        typing = $("<div>").append("<span>").addClass("care-chat-widget__message care-chat-widget__message--user typing");
-        typing.appendTo($('.mCSB_container'));
+      if (
+        $("#chat-message-textarea-input") !== "" &&
+        isTyping === true &&
+        e.which !== 13
+      ) {
+        typing = $("<div>")
+          .append("<span>")
+          .addClass(
+            "care-chat-widget__message care-chat-widget__message--user typing"
+          );
+        typing.appendTo($(".mCSB_container"));
         updateScrollbar();
         isTyping = false;
         return userTypingClear();
       }
     });
 
-    sentButton.on('click', insertMessage);
-
-    //}).call(this);
+    sentButton.on("click", insertMessage);
   });
 }
-
-
